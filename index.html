@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tugas Latihan 6</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">Dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="content">
+      <div class="container">
+        <div class="row mt-5 justify-content-center">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mt-2">Form Hitung Angsuran</h5>
+              </div>
+              <div class="card-body">
+                <form action="#" id="hitungAngsuran">
+                  <div class="form-group mb-3">
+                    <label for="" class="form-label">Nama : </label>
+                    <input type="text" name="" id="nama" class="form-control">
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="" class="form-label">Jumlah Pinjaman : </label>
+                    <div class="input-group">
+                      <div class="input-group-text">Rp</div>
+                      <input type="text" name="" id="jumlah_pinjaman" class="form-control">
+                    </div>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="" class="form-label">Tenor (Bulan) : </label>
+                    <div class="input-group">
+                      <input type="number" name="" id="tenor" class="form-control">
+                      <div class="input-group-text">Bulan</div>
+                    </div>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="" class="form-label">Bunga (%) : </label>
+                    <div class="input-group">
+                      <input type="number" name="" id="bunga" class="form-control">
+                      <div class="input-group-text">%</div>
+                    </div>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="" class="form-label">Angsuran : </label>
+                    <div class="input-group">
+                      <div class="input-group-text">Rp</div>
+                      <input type="text" readonly name="" id="angsuran" class="form-control">
+                    </div>
+                  </div>
+                  <div class="form-group mb-3 mt-4 d-flex justify-content-end">
+                    <div class="col-12 col-md-5 btn-group">
+                      <button class="btn btn-danger" type="reset">Reset</button>
+                      <button class="btn btn-primary ml-5" type="submit">Hitung</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
+    
+    <script>
+      $(function () {
+        function formatRupiah(angka, prefix){
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split   		= number_string.split(','),
+            sisa     		= split[0].length % 3,
+            rupiah     		= split[0].substr(0, sisa),
+            ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+        
+            if(ribuan){
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+        
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? '' + rupiah : '');
+        } 
+
+        function formatUang(n, currency) {
+            return currency + n.toFixed(0).replace(/./g, function(c, i, a) {
+                return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "." + c : c;
+            });
+        }
+
+        $('#jumlah_pinjaman').on('keyup', function () {
+          $(this).val(formatRupiah($(this).val(), ''))
+        })
+
+        $("#hitungAngsuran").on('submit', function (e) {
+          e.preventDefault()
+
+          let jumlahPinjaman = parseFloat($("#jumlah_pinjaman").val().split('.').join(''))
+          let bunga = parseInt($("#bunga").val())
+          let tenor = parseInt($("#tenor").val())
+
+          let hasil = (jumlahPinjaman + (jumlahPinjaman * (bunga / 100) * tenor)) / tenor
+
+          $("#angsuran").val(formatUang(hasil, ''))
+        })
+      })
+    </script>
+
+  </body>
+</html>
