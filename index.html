@@ -120,7 +120,7 @@
 
           let hasil = (jumlahPinjaman + (jumlahPinjaman * (bunga / 100) * tenor)) / tenor
 
-          $("#angsuran").val(formatUang(hasil, ''))
+          $("#angsuran").val(formatUang(isNaN(hasil) ? 0 : hasil, ''))
         })
       })
     </script>
